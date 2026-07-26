@@ -1,0 +1,77 @@
+import { leagues } from "@/lib/constants/site_images";
+import React from "react";
+import FootballStats from "../SingleStream/FootballStats";
+import RugbyStats from "../SingleStream/RugbyStats";
+import { MatchDetails, MatchStats } from "@/lib/types/scores";
+
+export const AllMatchStats = ({ data }: { data: MatchDetails }) => {
+  const details = data?.fixture;
+
+  const defaultLogo = leagues[details?.league as string];
+  const fixType = details?.fixture_type;
+
+  return (
+    <main className="pt-16 relative">
+      <div className="absolute right-8 top-8">
+        {/* <img src={kawowo} alt="kawowo" height={150} width={150} /> */}
+      </div>
+
+      <div className="w-[650px] mx-auto relative">
+        <h1 className="bg-white w-fit max-w-full px-2 mx-auto rounded-full text-sm font-extrabold text-center uppercase mb-14">
+          {details?.game_status === "ended" || details?.game_status === "FT"
+            ? "Full Time"
+            : (details?.minute == 45 || details?.minute == 7) &&
+                details?.game_moment == "secondhalf"
+              ? "Half Time"
+              : details?.game_status === "notstarted"
+                ? details?.matchtime
+                : details?.minute}
+        </h1>
+
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90px] h-20 p-1 flex justify-center items-center border rounded-lg bg-white">
+          <img
+            src={defaultLogo}
+            alt="league"
+            className="w-full h-full object-cover"
+          />
+        </div>
+
+        <div className="flex border rounded-full bg-red-500">
+          <div className="w-[60px] flex items-center justify-center text-white font-bold text-2xl">
+            {details?.home_score}
+          </div>
+          <div className="bg-white w-[600px] p-2 flex font-bold text-blue-800 text-lg uppercase">
+            <div className="w-1/2  text-ellipsis whitespace-nowrap">
+              {details?.team1_name}
+            </div>
+            <div className="w-1/4"></div>
+            <div className="w-1/2 text-right text-ellipsis whitespace-nowrap">
+              {details?.team2_name}
+            </div>
+          </div>
+          <div className="w-[60px] flex items-center justify-center text-white font-bold text-2xl">
+            {details?.away_score}
+          </div>
+        </div>
+      </div>
+
+      <section className="w-[480px] mx-auto">
+        <h1 className="bg-white w-[250px] mx-auto rounded-full text-xl font-bold text-center uppercase m-3">
+          Match Statistics
+        </h1>
+
+        {fixType === "football" ? (
+          <FootballStats data={data?.stats as MatchStats} />
+        ) : fixType === "rugby7" ||
+          fixType === "rugby15" ||
+          fixType === "rugby10" ? (
+          <RugbyStats data={data?.stats as MatchStats} />
+        ) : (
+          <div className="h-20 flex items-center justify-center text-xl">
+            Data is coming soon!
+          </div>
+        )}
+      </section>
+    </main>
+  );
+};

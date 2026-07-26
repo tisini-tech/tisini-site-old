@@ -1,14 +1,7 @@
-import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useMemo, useState } from "react";
-
-import Spinner from "@/components/spinner/Spinner";
-import { footballStats, rugbyStats } from "./LowerThirdStats";
-
-// import kawowo from "@/assets/img/kawowo.jpg";
+import React, { useEffect, useMemo, useState } from "react";
+import { footballStats, rugbyStats } from "../SingleStream/LowerThirdStats";
+import { MatchDetails } from "@/lib/types/scores";
 import tisini from "@/assets/img/tisini-logo.png";
-import { fetchFixtureDetails } from "@/lib/data/FetchFootballFixtures";
-// import league from "@/assets/img/nile-special.png";
 
 interface Stat {
   stat: string;
@@ -18,27 +11,7 @@ interface Stat {
 
 type StatsArray = Stat[];
 
-export const LowerThird = () => {
-  const { fixtureId } = useParams();
-
-  const { data, isLoading, refetch } = useQuery(
-    ["fixtureDetails", fixtureId],
-    () => fetchFixtureDetails(fixtureId!),
-    {
-      refetchInterval: 10000,
-      refetchOnWindowFocus: true,
-    },
-  );
-
-  useEffect(() => {
-    if (
-      data?.fixture.game_status === "ended" ||
-      data?.fixture.game_status === "FT"
-    ) {
-      refetch({ cancelRefetch: true });
-    }
-  }, [data, refetch]);
-
+export const LowerThird = ({ data }: { data: MatchDetails }) => {
   const fixType = data?.fixture.fixture_type;
 
   const [currentStats, setCurrentStats] = useState<StatsArray>([
@@ -47,43 +20,39 @@ export const LowerThird = () => {
   const [index, setIndex] = useState(0);
   const [fade, setFade] = useState(false);
 
-  useEffect(() => {
-    if (data?.fixture.game_status === "ended") {
-      refetch({ cancelRefetch: true });
-    }
-  }, [data, refetch]);
-
   const stats = useMemo(() => {
-    if (data) {
-      const statsList =
-        fixType === "football"
-          ? footballStats(data.stats)
-          : rugbyStats(data.stats);
+    if (!data) return [];
 
-      return statsList;
-    }
-
-    return [];
+    return fixType === "football"
+      ? footballStats(data.stats)
+      : rugbyStats(data.stats);
   }, [fixType, data]);
 
   useEffect(() => {
+    if (!stats.length) return;
+    const safeIndex = index % stats.length;
+    setCurrentStats([stats[safeIndex]]);
+    if (safeIndex !== index) setIndex(safeIndex);
+  }, [stats, index]);
+
+  useEffect(() => {
+    if (!stats.length) return;
+
     const interval = setInterval(() => {
-      setFade(true); // Start fade-out
+      setFade(true);
       setTimeout(() => {
         const nextIndex = (index + 1) % stats.length;
         setCurrentStats([stats[nextIndex]]);
         setIndex(nextIndex);
-        setFade(false); // Start fade-in
-      }, 300); // Delay content change until fade-out is done
-    }, 3000); // Update every 3 seconds
+        setFade(false);
+      }, 300);
+    }, 3000);
 
-    return () => clearInterval(interval); // Cleanup interval on unmount
+    return () => clearInterval(interval);
   }, [index, stats]);
 
-  if (isLoading) return <Spinner />;
-
   const details = data?.fixture;
-  // const scores = data?.scores;
+  const active = currentStats[0] ?? { stat: "-", home: "-", away: "-" };
 
   return (
     <main className="relative h-screen w-screen overflow-hidden">
@@ -101,13 +70,13 @@ export const LowerThird = () => {
               }`}
             >
               <div className="flex w-16 shrink-0 items-center justify-center rounded-sm border bg-white text-base font-semibold leading-none text-blue-800">
-                {currentStats[0]?.home}
+                {active.home}
               </div>
               <div className="flex min-w-0 flex-1 items-center justify-center truncate rounded-sm bg-primary px-3 text-sm font-bold uppercase leading-none text-white">
-                <span className="truncate">{currentStats[0]?.stat}</span>
+                <span className="truncate">{active.stat}</span>
               </div>
               <div className="flex w-16 shrink-0 items-center justify-center rounded-sm border bg-white text-base font-semibold leading-none text-blue-800">
-                {currentStats[0]?.away}
+                {active.away}
               </div>
             </div>
 
