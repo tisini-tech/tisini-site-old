@@ -45,6 +45,23 @@ export const fetchNewFootballFixtures = async (
   return res.data;
 };
 
+export const fetchLeagueFixtures = async () => {
+  const url = import.meta.env.VITE_API_DJANGO_API;
+  const apiKey = import.meta.env.VITE_API_KEY;
+
+  const res = await axios.get<NewFixture[]>(
+    `${url}/competitions/238/seasons/258/fixtures`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": `${apiKey}`,
+      },
+    },
+  );
+
+  return res.data;
+};
+
 export const fetchFixtureDates = async (fixType: string) => {
   const url = import.meta.env.VITE_API_DJANGO_API;
   const apiKey = import.meta.env.VITE_API_KEY;

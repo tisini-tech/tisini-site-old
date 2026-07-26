@@ -58,7 +58,9 @@ const SingleStream = () => {
             : (details?.minute == 45 || details?.minute == 7) &&
                 details?.game_moment == "secondhalf"
               ? "Half Time"
-              : details?.minute}
+              : details?.game_status === "notstarted"
+                ? details?.matchtime
+                : details?.minute}
         </h1>
 
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90px] h-20 p-1 flex justify-center items-center border rounded-lg bg-white">
@@ -89,7 +91,7 @@ const SingleStream = () => {
       </div>
 
       <section className="w-[480px] mx-auto">
-        <h1 className="text-xl font-bold text-center uppercase m-3">
+        <h1 className="bg-white w-[250px] mx-auto rounded-full text-xl font-bold text-center uppercase m-3">
           Match Statistics
         </h1>
 
