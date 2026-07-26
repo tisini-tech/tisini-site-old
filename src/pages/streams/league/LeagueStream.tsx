@@ -11,7 +11,8 @@ import { MatchStats, NewFixture } from "@/lib/types/scores";
 import FootballStats from "../SingleStream/FootballStats";
 import RugbyStats from "../SingleStream/RugbyStats";
 
-const isLive = (status: string) => status === "started";
+const isLive = (status: string) =>
+  status === "started" || status === "HT" || status === "secondhalf";
 const isFinished = (status: string) => status === "ended" || status === "FT";
 const isUpcoming = (status: string) => status === "notstarted";
 
