@@ -12,8 +12,7 @@ import FootballStats from "../SingleStream/FootballStats";
 import RugbyStats from "../SingleStream/RugbyStats";
 
 const isLive = (status: string) => status === "started";
-const isFinished = (status: string) =>
-  status === "ended" || status === "FT";
+const isFinished = (status: string) => status === "ended" || status === "FT";
 const isUpcoming = (status: string) => status === "notstarted";
 
 const byMatchTime = (a: NewFixture, b: NewFixture) => {
@@ -92,7 +91,7 @@ const LeagueStream = () => {
       </div>
 
       <div className="w-[650px] mx-auto relative">
-        <h1 className="text-sm font-extrabold text-center uppercase mb-14">
+        <h1 className="bg-white w-fit max-w-full px-2 mx-auto rounded-full text-sm font-extrabold text-center uppercase mb-14">
           {details?.game_status === "ended" || details?.game_status === "FT"
             ? "Full Time"
             : (details?.minute == 45 || details?.minute == 7) &&
