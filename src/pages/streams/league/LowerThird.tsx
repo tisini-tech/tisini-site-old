@@ -54,38 +54,47 @@ export const LowerThird = ({ data }: { data: MatchDetails }) => {
   const details = data?.fixture;
   const active = currentStats[0] ?? { stat: "-", home: "-", away: "-" };
 
+  const statLabel = String(active.stat);
+  const statFontSize =
+    statLabel.length > 24 ? 15 : statLabel.length > 18 ? 17 : 20;
+
   return (
     <main className="relative h-screen w-screen overflow-hidden">
       {/* Raised for broadcast safe area; side padding matches original framing */}
       <div className="absolute inset-x-0 bottom-[6vh] w-full px-4">
-        <div className="mx-auto flex h-16 max-w-7xl items-center bg-[#023270] px-2">
+        <div className="mx-auto flex h-[4.5rem] max-w-7xl items-center bg-[#023270] px-2">
           <div className="mx-auto flex w-4/5 min-w-0 items-center gap-1">
-            <div className="flex h-11 min-w-0 flex-[1] items-center justify-center truncate rounded-sm bg-red-500 px-3 text-base font-bold leading-none text-white">
-              <span className="truncate">{details?.team1_name}</span>
+            <div className="flex h-14 min-w-0 flex-[1] items-center justify-center overflow-hidden rounded-sm bg-red-500 px-3 py-1 text-[22px] font-bold leading-tight text-white">
+              <span className="truncate leading-tight">{details?.team1_name}</span>
             </div>
 
             <div
-              className={`mx-auto flex h-11 min-w-0 flex-[1.6] items-stretch gap-1 transition-opacity duration-300 ease-in-out ${
+              className={`mx-auto flex h-14 min-w-0 flex-[1.6] items-stretch gap-1 transition-opacity duration-300 ease-in-out ${
                 fade ? "opacity-0" : "opacity-100"
               }`}
             >
-              <div className="flex w-16 shrink-0 items-center justify-center rounded-sm border bg-white text-base font-semibold leading-none text-blue-800">
+              <div className="flex w-[4.5rem] shrink-0 items-center justify-center rounded-sm border bg-white text-[22px] font-semibold leading-tight text-blue-800">
                 {active.home}
               </div>
-              <div className="flex min-w-0 flex-1 items-center justify-center truncate rounded-sm bg-primary px-3 text-sm font-bold uppercase leading-none text-white">
-                <span className="truncate">{active.stat}</span>
+              <div className="flex min-w-0 flex-1 items-center justify-center overflow-hidden rounded-sm bg-primary px-2 py-1 font-bold uppercase leading-tight text-white">
+                <span
+                  className="line-clamp-2 text-center break-words"
+                  style={{ fontSize: `${statFontSize}px` }}
+                >
+                  {statLabel}
+                </span>
               </div>
-              <div className="flex w-16 shrink-0 items-center justify-center rounded-sm border bg-white text-base font-semibold leading-none text-blue-800">
+              <div className="flex w-[4.5rem] shrink-0 items-center justify-center rounded-sm border bg-white text-[22px] font-semibold leading-tight text-blue-800">
                 {active.away}
               </div>
             </div>
 
-            <div className="flex h-11 min-w-0 flex-[1] items-center justify-center truncate rounded-sm bg-yellow-500 px-3 text-base font-bold leading-none text-black">
-              <span className="truncate">{details?.team2_name}</span>
+            <div className="flex h-14 min-w-0 flex-[1] items-center justify-center overflow-hidden rounded-sm bg-yellow-500 px-3 py-1 text-[22px] font-bold leading-tight text-black">
+              <span className="truncate leading-tight">{details?.team2_name}</span>
             </div>
           </div>
 
-          <div className="ml-2 h-12 w-24 shrink-0">
+          <div className="ml-2 h-14 w-28 shrink-0">
             <img
               src={tisini}
               alt="Tisini"
