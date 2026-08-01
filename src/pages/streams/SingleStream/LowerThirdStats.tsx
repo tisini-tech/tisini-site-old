@@ -98,6 +98,27 @@ export const rugbyStats = (data: MatchStats) => {
     getSubEvent(away, "76", "89") +
     getSubEvent(away, "262", "703");
 
+  const homeSuccKicks =
+    getSubEvent(home, "33", "52") +
+    getSubEvent(home, "49", "60") +
+    getSubEvent(home, "79", "92") +
+    getSubEvent(home, "79", "311") +
+    getSubEvent(home, "49", "44") +
+    getSubEvent(home, "79", "94") +
+    getSubEvent(home, "33", "53") +
+    getSubEvent(home, "253", "635") +
+    getSubEvent(home, "253", "634");
+  const awaySuccKicks =
+    getSubEvent(away, "33", "52") +
+    getSubEvent(away, "49", "60") +
+    getSubEvent(away, "79", "92") +
+    getSubEvent(away, "79", "311") +
+    getSubEvent(away, "49", "44") +
+    getSubEvent(away, "79", "94") +
+    getSubEvent(away, "33", "53") +
+    getSubEvent(away, "253", "635") +
+    getSubEvent(away, "253", "634");
+
   const statsList = [
     {
       stat: "Tries scored",
@@ -122,8 +143,8 @@ export const rugbyStats = (data: MatchStats) => {
     },
     {
       stat: "successful conversions",
-      home: getSubEvent(home, "49", "60") + getSubEvent(home, "33", "52"),
-      away: getSubEvent(away, "49", "60") + getSubEvent(away, "33", "52"),
+      home: homeSuccKicks,
+      away: awaySuccKicks,
     },
     {
       stat: "Visit in opponents 22",
