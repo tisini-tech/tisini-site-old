@@ -24,3 +24,44 @@ export function mapNewFixtureToFixture(fixture: NewFixture): Fixture {
     series: fixture.series,
   };
 }
+
+/** Adapt legacy PHP Fixture payloads for components typed on NewFixture. */
+export function mapFixtureToNewFixture(fixture: Fixture): NewFixture {
+  return {
+    id: Number(fixture.id),
+    team1_id: Number(fixture.team1_id),
+    team2_id: Number(fixture.team2_id),
+    team1_name: fixture.team1_name,
+    team2_name: fixture.team2_name,
+    home_score: fixture.home_score,
+    away_score: fixture.away_score,
+    fixture_type: fixture.fixture_type,
+    matchday: fixture.matchday,
+    league: fixture.league,
+    league_name: fixture.league,
+    series: fixture.series,
+    series_name: "",
+    division: "",
+    division_name: "",
+    stage: "",
+    stage_name: "",
+    branch: "",
+    branch_name: "",
+    game_status: fixture.game_status,
+    game_moment: fixture.game_moment,
+    game_date: fixture.game_date,
+    minute: Number(fixture.minute) || 0,
+    second: Number(fixture.second) || 0,
+    matchtime: fixture.game_time,
+    location_id: null,
+    team1_logo: null,
+    team2_logo: null,
+    venue: null,
+    team1_short_name: "",
+    team2_short_name: "",
+    home_ht_score: "",
+    away_ht_score: "",
+    home_penalties: "",
+    away_penalties: "",
+  };
+}

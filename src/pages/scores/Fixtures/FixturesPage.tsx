@@ -10,7 +10,7 @@ import {
   fetchNewFootballFixtures,
   matchDayFixtures,
 } from "@/lib/data/FetchFootballFixtures";
-import { mapNewFixtureToFixture } from "@/lib/data/mapNewFixtureToFixture";
+import { mapFixtureToNewFixture } from "@/lib/data/mapNewFixtureToFixture";
 
 const FixturesPage = () => {
   const today = new Date().toISOString().split("T")[0];
@@ -192,7 +192,7 @@ const FixturesPage = () => {
                         {fixtures.map((fixture) => (
                           <div key={fixture.id}>
                             <SingleResult
-                              fixture={fixture}
+                              fixture={mapFixtureToNewFixture(fixture)}
                               newFixture={false}
                             />
                           </div>
@@ -212,7 +212,10 @@ const FixturesPage = () => {
 
                 {fixtures.map((fixture) => (
                   <div key={fixture.id}>
-                    <SingleResult fixture={fixture} newFixture={false} />
+                    <SingleResult
+                      fixture={mapFixtureToNewFixture(fixture)}
+                      newFixture={false}
+                    />
                   </div>
                 ))}
               </div>
@@ -236,10 +239,7 @@ const FixturesPage = () => {
 
                 {fixtures.map((fixture) => (
                   <div key={fixture.id}>
-                    <SingleResult
-                      fixture={mapNewFixtureToFixture(fixture)}
-                      newFixture={true}
-                    />
+                    <SingleResult fixture={fixture} newFixture={true} />
                   </div>
                 ))}
               </div>
