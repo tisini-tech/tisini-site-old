@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BallScorer, TopScorer } from "../types/leagues";
+import { TopEventPlayer, TopScorer } from "../types/leagues";
 
 export const fetchScorers = async (season: string) => {
   const url = import.meta.env.VITE_API_SCORES_URL;
@@ -19,25 +19,26 @@ export const fetchScorers = async (season: string) => {
   }
 };
 
-const fetchSeasonScorers = async (season: string, type: string) => {
-  const url = import.meta.env.VITE_API_SCORES_URL;
-  const token = import.meta.env.VITE_API_TOKEN;
+export const fetchSeasonScorers = async (
+  tournId: string,
+  season: string,
+  eventId: string,
+) => {
+  const url = import.meta.env.VITE_API_DJANGO_API;
+  const apiKey = import.meta.env.VITE_API_KEY;
 
   try {
-    const res = await axios.post<TopScorer[] | BallScorer[]>(
-      `${url}?gettoken=${token}`,
+    const res = await axios.get<TopEventPlayer>(
+      `${url}/competitions/${tournId}/seasons/${season}/events/${eventId}/top-performers?page_size=200`,
       {
-        action: "topPointRefData",
-        fixturetype: type,
-        seriesid: season,
-      }
+        headers: {
+          "x-api-key": apiKey,
+        },
+      },
     );
 
-    // console.log(res);
     return res.data;
   } catch (error: any) {
-    throw new Error(`Failed to fetch league scorers, ${error.message}`);
+    throw new Error(`Failed to fetch event scorers, ${error.message}`);
   }
 };
-
-export default fetchSeasonScorers;

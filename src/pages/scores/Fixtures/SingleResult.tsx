@@ -2,11 +2,11 @@ import { useNavigate } from "react-router-dom";
 
 import homeImg from "@/assets/homeLogo.png";
 import awayImg from "@/assets/awayLogo.png";
-import { Fixture } from "@/lib/types/scores";
+import { NewFixture } from "@/lib/types/scores";
 import { teamImages } from "@/lib/constants/site_images";
 
 type SingleResultProps = {
-  fixture: Fixture;
+  fixture: NewFixture;
   newFixture: boolean;
 };
 
@@ -50,10 +50,10 @@ const SingleResult = ({ fixture, newFixture }: SingleResultProps) => {
 
         <div className="col-span-2 flex items-center justify-center">
           {fixture.game_status === "notstarted" ? (
-            fixture.game_time === "" ? (
+            fixture.matchtime === "" ? (
               <div className="animate-spin-slow">⌛</div>
             ) : (
-              <div>{fixture.game_time}</div>
+              <div>{fixture.matchtime}</div>
             )
           ) : (
             <div
@@ -74,7 +74,7 @@ const SingleResult = ({ fixture, newFixture }: SingleResultProps) => {
               <div className="text-xs">
                 {fixture.game_status === "ended" || fixture.game_status === "FT"
                   ? "FT"
-                  : (fixture.minute == "45" || fixture.minute == "46") &&
+                  : (fixture.minute == 45 || fixture.minute == 46) &&
                       fixture.game_moment == "secondhalf"
                     ? "HT"
                     : fixture.minute}

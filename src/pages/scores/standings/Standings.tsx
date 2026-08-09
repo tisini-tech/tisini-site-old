@@ -1,25 +1,27 @@
-import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
-import homeImg from "@/assets/homeLogo.png";
 import { Standing } from "@/lib/types/scores";
 import Spinner from "@/components/spinner/Spinner";
 import FetchStandings from "@/lib/data/FetchStandings";
 
-export const Standings = () => {
-  const { leagueId } = useParams();
-
-  const tournId = leagueId?.split("-").pop() || "";
-
-  const { data, isLoading } = useQuery(["standings", tournId], () =>
-    FetchStandings(tournId),
-  );
+export const Standings = ({
+  tournId,
+  season,
+}: {
+  tournId: string;
+  season: string;
+}) => {
+  const { data, isLoading } = useQuery({
+    queryKey: ["standings", tournId, season],
+    queryFn: () => FetchStandings(tournId, season),
+    enabled: !!tournId && !!season,
+  });
 
   if (isLoading) {
     return <Spinner />;
   }
 
-  const standings = data?.series[0].standings;
+  const standings = data?.standings;
 
   if (!standings) {
     return (
@@ -127,9 +129,13 @@ const StandingsRow = ({ item, idx, leagueId }: RowProps) => {
         >
           {idx + 1}
         </span>
-        <img src={homeImg} alt={item.team} className="w-6 h-6 rounded-full" />
+        <img
+          src={item.logo}
+          alt={item.team_name}
+          className="w-6 h-6 rounded-full"
+        />
         <span className="font-medium text-gray-900 truncate flex-1">
-          {item.team}
+          {item.team_name}
         </span>
 
         {item?.live && (

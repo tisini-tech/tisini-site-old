@@ -1,8 +1,8 @@
-import { BallScorer } from "@/lib/types/leagues";
+import { TopPlayer } from "@/lib/types/leagues";
 import React from "react";
 
-const FootballScorers = ({ players }: { players: BallScorer[] }) => {
-  const scorers = players.filter((p) => p.playername !== "Own Goal ");
+const FootballScorers = ({ players }: { players: TopPlayer[] }) => {
+  const scorers = players.filter((p) => p.name !== "Own Goal ");
 
   return (
     <div className="w-full max-w-5xl mx-auto">
@@ -34,20 +34,20 @@ const FootballScorers = ({ players }: { players: BallScorer[] }) => {
             <tbody className="divide-y divide-muted">
               {scorers?.map((player) => (
                 <tr
-                  key={player.playerid}
+                  key={player.player_id}
                   className="hover:bg-primary/10 transition-colors"
                 >
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10 flex items-center justify-center rounded-full bg-primary text-primary-foreground font-medium">
-                        {player.playername[0]}
+                        {player.name[0]}
                       </div>
                       <div className="ml-4">
                         <div className="text-sm font-medium text-foreground capitalize text-primary">
-                          {player.playername}
+                          {player.name}
                         </div>
                         <div className="text-sm text-gray-500">
-                          {player.teamname}
+                          {player.team_name}
                         </div>
                       </div>
                     </div>
@@ -65,7 +65,7 @@ const FootballScorers = ({ players }: { players: BallScorer[] }) => {
                     {player.dropgoal ?? "-"}
                   </td> */}
                   <td className="px-6 py-4 whitespace-nowrap text-center text-primary font-bold">
-                    {player.goal}
+                    {player.total}
                   </td>
                 </tr>
               ))}

@@ -1,23 +1,23 @@
 import axios from "axios";
-import { Fixture } from "../types/leagues";
+import { NewFixture } from "../types/scores";
 
-const fetchSeasonFixtures = async (season: string) => {
-  const url = import.meta.env.VITE_API_SCORES_URL;
-  const token = import.meta.env.VITE_API_TOKEN;
+const fetchSeasonFixtures = async (tournId: string, season: string) => {
+  const url = import.meta.env.VITE_API_DJANGO_API;
+  const apiKey = import.meta.env.VITE_API_KEY;
 
   try {
-    const res = await axios.post<Fixture[]>(`${url}?gettoken=${token}`, {
-      action: "fixtures",
-      seasonid: season,
-    });
+    const res = await axios.get<NewFixture[]>(
+      `${url}/competitions/${tournId}/seasons/${season}/fixtures`,
+      {
+        headers: {
+          "x-api-key": apiKey,
+        },
+      },
+    );
 
-    // console.log(res);
-    if (!Array.isArray(res.data)) {
-      throw new Error("Invalid response format: expected an array");
-    }
     return res.data;
   } catch (error: any) {
-    throw new Error(`Failed to fetch leagues, ${error.message}`);
+    throw new Error(`Failed to fetch fixtures, ${error.message}`);
   }
 };
 

@@ -75,3 +75,35 @@ export type BallScorer = {
   goal: string;
   playername: string;
 };
+
+export type TopPlayer = {
+  player_id: number;
+  name: string;
+  passportphoto: string;
+  team_player_id: string;
+  nationality: string;
+  team_id: number;
+  team_name: string;
+  team_short_name: string;
+  team_logo: string;
+  total: number;
+  sub_events: SubEvent[];
+};
+
+export type SubEvent = {
+  sub_event_id: string;
+  sub_event_name: string;
+  total: number;
+};
+
+export type TopEventPlayer = {
+  total: number;
+  page: number;
+  page_size: number;
+  total_pages: number;
+  has_next: boolean;
+  has_previous: boolean;
+  next: string;
+  previous: string;
+  items: TopPlayer[];
+};

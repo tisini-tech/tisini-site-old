@@ -6,7 +6,6 @@ import { cn } from "@/lib/cn";
 import SingleResult from "./SingleResult";
 import FixtureLoader from "../FixtureLoader";
 import { FixtureDate, NewFixture } from "@/lib/types/scores";
-import { mapNewFixtureToFixture } from "@/lib/data/mapNewFixtureToFixture";
 import {
   fetchFixtureDates,
   fetchNewFootballFixtures,
@@ -56,34 +55,7 @@ export const FixturesPage = () => {
   );
 
   const groupedFixtures = useMemo(() => {
-    const grouped: Record<string, Record<string, NewFixture[]>> = {};
-
-    for (const fixture of fixtures ?? []) {
-      const leagueKey =
-        fixture.league_name || fixture.league || "Unknown League";
-
-      const division = (fixture.division_name || fixture.division || "").trim();
-      const stage = (fixture.stage_name || fixture.stage || "").trim();
-
-      let groupKey = "";
-
-      if (division && stage) {
-        groupKey = `${division} - ${stage}`;
-      } else if (division) {
-        groupKey = division;
-      } else if (stage) {
-        groupKey = stage;
-      } else {
-        groupKey = "";
-      }
-
-      grouped[leagueKey] ??= {};
-      grouped[leagueKey][groupKey] ??= [];
-
-      grouped[leagueKey][groupKey].push(fixture);
-    }
-
-    return grouped;
+    return groupNewFixtures(fixtures as NewFixture[]);
   }, [fixtures]);
 
   useEffect(() => {
@@ -140,10 +112,7 @@ export const FixturesPage = () => {
 
               {fixtures.map((fixture) => (
                 <div key={fixture.id}>
-                  <SingleResult
-                    fixture={mapNewFixtureToFixture(fixture)}
-                    newFixture={false}
-                  />
+                  <SingleResult fixture={fixture} newFixture={false} />
                 </div>
               ))}
             </div>
@@ -152,4 +121,34 @@ export const FixturesPage = () => {
       ))}
     </section>
   );
+};
+
+export const groupNewFixtures = (fixtures: NewFixture[]) => {
+  const grouped: Record<string, Record<string, NewFixture[]>> = {};
+
+  for (const fixture of fixtures ?? []) {
+    const leagueKey = fixture.league_name || fixture.league || "Unknown League";
+
+    const division = (fixture.division_name || fixture.division || "").trim();
+    const stage = (fixture.stage_name || fixture.stage || "").trim();
+
+    let groupKey = "";
+
+    if (division && stage) {
+      groupKey = `${division} - ${stage}`;
+    } else if (division) {
+      groupKey = division;
+    } else if (stage) {
+      groupKey = stage;
+    } else {
+      groupKey = "";
+    }
+
+    grouped[leagueKey] ??= {};
+    grouped[leagueKey][groupKey] ??= [];
+
+    grouped[leagueKey][groupKey].push(fixture);
+  }
+
+  return grouped;
 };

@@ -5,28 +5,32 @@ import { useNavigate } from "react-router-dom";
 import homeImg from "@/assets/homeLogo.png";
 import awayImg from "@/assets/awayLogo.png";
 import { Fixture, RefData } from "@/lib/types/leagues";
+import { NewFixture } from "@/lib/types/scores";
 import { teamImages } from "@/lib/constants/site_images";
 
-const FixtureCard = ({ fixture }: { fixture: Fixture }) => {
+const FixtureCard = ({ fixture }: { fixture: NewFixture }) => {
   const navigate = useNavigate();
 
-  const homeLogo = teamImages[fixture.team1_id] ?? homeImg;
-  const awayLogo = teamImages[fixture.team2_id] ?? awayImg;
-  //   const hLogo = fixture.team1_logo === "" ? null : fixture.team1_logo;
-  //   const aLogo = fixture.team2_logo === "" ? null : fixture.team2_logo;
+  const homeLogo =
+    fixture.team1_logo || teamImages[String(fixture.team1_id)] || homeImg;
+  const awayLogo =
+    fixture.team2_logo || teamImages[String(fixture.team2_id)] || awayImg;
 
-  // console.log(fixture);
+  const sportPath =
+    fixture.fixture_type === "football"
+      ? "football"
+      : fixture.fixture_type === "basketball"
+        ? "basketball"
+        : "rugby";
 
   return (
     <div
       className={`grid grid-cols-12 py-3 px-2 font-mono text-xs items-center hover:bg-blue-200 transition-colors cursor-pointer`}
       onClick={() => {
-        navigate(
-          `/scores/${fixture.fixture_type}/${fixture.league}-${fixture.series}-${fixture.fixture}`,
-        );
+        navigate(`/scores/${sportPath}/${fixture.id}`);
       }}
     >
-      {/* Date and Time - New left column */}
+      {/* Date and Time */}
       <div className="col-span-2 flex flex-col items-start justify-center text-black-lighter">
         <div className="text-xs">
           {new Date(fixture.game_date).toLocaleDateString("en-US", {
@@ -37,10 +41,8 @@ const FixtureCard = ({ fixture }: { fixture: Fixture }) => {
 
         {fixture.game_status === "notstarted" ? (
           <div className="text-xs font-semibold">{fixture.matchtime}</div>
-        ) : fixture.game_status === "FT" ? (
-          <div className="text-xs text-muted-foreground capitalize">
-            {"ended"}
-          </div>
+        ) : fixture.game_status === "ended" || fixture.game_status === "FT" ? (
+          <div className="text-xs text-muted-foreground capitalize">ended</div>
         ) : (
           <div className="text-xs text-green-600 capitalize">
             live <span className="animate-caret-blink">{fixture.minute}</span>
@@ -48,7 +50,7 @@ const FixtureCard = ({ fixture }: { fixture: Fixture }) => {
         )}
       </div>
 
-      {/* Team 1 - Reduced column span */}
+      {/* Team 1 */}
       <div className="col-span-3 flex items-center justify-end gap-2 text-primary">
         <div className="text-end text-xs">{fixture.team1_name}</div>
         <div className="w-8 h-8 relative shrink-0">
@@ -64,29 +66,16 @@ const FixtureCard = ({ fixture }: { fixture: Fixture }) => {
 
       {/* Match status */}
       <div className="col-span-2 flex flex-col items-center justify-center pt-5 text-black-lighter">
-        {fixture.matchplay_status === "3" ? (
-          <p className="text-sm font-semibold text-muted-foreground">
-            Postponed
-          </p>
-        ) : fixture.matchplay_status === "1" ? (
-          <>
-            <p className="text-xs font-semibold">
-              {fixture.home_score} - {fixture.away_score}
-            </p>
-            <p className="text-xs text-muted-foreground">Abandoned</p>
-          </>
-        ) : fixture.game_status === "notstarted" ? (
+        {fixture.game_status === "notstarted" ? (
           <p className="text-xs text-muted-foreground capitalize">vs</p>
         ) : (
-          <>
-            <p className="text-xs font-semibold">
-              {fixture.home_score} - {fixture.away_score}
-            </p>
-          </>
+          <p className="text-xs font-semibold">
+            {fixture.home_score} - {fixture.away_score}
+          </p>
         )}
       </div>
 
-      {/* Team 2 - Reduced column span */}
+      {/* Team 2 */}
       <div className="col-span-4 flex items-center gap-2 text-primary">
         <div className="w-8 h-8 relative shrink-0">
           <img

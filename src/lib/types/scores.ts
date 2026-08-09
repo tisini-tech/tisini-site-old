@@ -53,6 +53,12 @@ export type NewFixture = {
   team1_logo: string | null;
   team2_logo: string | null;
   venue: string | null;
+  team1_short_name: string;
+  team2_short_name: string;
+  home_ht_score: string;
+  away_ht_score: string;
+  home_penalties: string;
+  away_penalties: string;
 };
 
 export type FixtureDate = string;
@@ -191,7 +197,6 @@ export type Live = {
 };
 
 export type Standing = {
-  team: string;
   D: number;
   GA: number;
   GD: number;
@@ -201,6 +206,10 @@ export type Standing = {
   Pts: number;
   W: number;
   live: Live | null;
+  id: number;
+  team_name: string;
+  short_name: string;
+  logo: string;
 };
 
 export type SerieStanding = {
@@ -231,10 +240,47 @@ export type Tourn = {
   leaguelogo: string | null;
 };
 
+export type Stage = {
+  id: number;
+  name: string;
+  standings: Standing[];
+};
+
 export type TournamentStanding = {
-  tournament_id: string;
-  tournament: Tourn;
-  series: SerieStanding[];
+  competition: number;
+  season: number;
+  division: number;
+  type: string;
+  matches_played: number;
+  standings: Standing[];
+  stages: Stage[];
+  division_standings: [
+    {
+      position: number;
+      team_id: number;
+      team_name: string;
+      team_short_name: string;
+      team_logo: string;
+      points: number;
+    },
+  ];
+  overall_standings: [
+    {
+      position: number;
+      team_id: number;
+      team_name: string;
+      team_short_name: string;
+      team_logo: string;
+      total_points: number;
+      division_points: [
+        {
+          division_id: number;
+          division_name: string;
+          points: number;
+        },
+      ];
+    },
+  ];
 };
 
 export type GroupByDate = {
@@ -389,8 +435,6 @@ export type MatchDetails = {
   highlights: Highlights[];
   stats: MatchStats;
 };
-
-
 
 export type Squad = {
   id: number;

@@ -1,16 +1,26 @@
 import { useQuery } from "@tanstack/react-query";
 
 import Spinner from "@/components/spinner/Spinner";
-import RugbyScorers from "@/components/scores/RugbyScorers";
-import { BallScorer, TopScorer } from "@/lib/types/leagues";
-import fetchSeasonScorers from "@/lib/data/FetchLeagueScorers";
+import { TopPlayer } from "@/lib/types/leagues";
+import { fetchSeasonScorers } from "@/lib/data/FetchLeagueScorers";
 import FootballScorers from "@/components/scores/FootballScorers";
 
-const ScorersTab = ({ season, type }: { season: string; type: string }) => {
-  const { data, isError, isLoading } = useQuery(
-    ["season-scorers", season],
-    () => fetchSeasonScorers(season, type)
-  );
+const ScorersTab = ({
+  tournId,
+  season,
+  type,
+}: {
+  tournId: string;
+  season: string;
+  type: string;
+}) => {
+  const eventId = type === "football" ? "19" : "253";
+
+  const { data, isError, isLoading } = useQuery({
+    queryKey: ["season-scorers", tournId, season, eventId],
+    queryFn: () => fetchSeasonScorers(tournId, season, eventId),
+    enabled: !!tournId && !!season && !!eventId,
+  });
 
   if (isLoading) {
     return (
@@ -28,7 +38,7 @@ const ScorersTab = ({ season, type }: { season: string; type: string }) => {
     );
   }
 
-  if (data?.length <= 0) {
+  if (data?.items.length <= 0) {
     return (
       <div className="p-8 text-center text-muted-foreground">
         No scorers available
@@ -37,9 +47,10 @@ const ScorersTab = ({ season, type }: { season: string; type: string }) => {
   }
 
   if (type === "football")
-    return <FootballScorers players={data as BallScorer[]} />;
+    return <FootballScorers players={data.items as TopPlayer[]} />;
 
-  return <RugbyScorers data={data as TopScorer[]} />;
+  // return <RugbyScorers data={data.items as TopPlayer[]} />;
+  return null;
 };
 
 export default ScorersTab;

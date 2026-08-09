@@ -133,11 +133,21 @@ const LeaguesPage = () => {
       </nav>
 
       <section className="p-2">
-        {activeTab === "1" && <ResultsTab season={season} />}
+        {activeTab === "1" && (
+          <ResultsTab tournId={id as string} season={season} />
+        )}
 
-        {activeTab === "2" && <ScorersTab season={season} type={league.type} />}
+        {activeTab === "2" && (
+          <ScorersTab
+            tournId={id as string}
+            season={season}
+            type={league.type}
+          />
+        )}
 
-        {activeTab === "3" && <Standings />}
+        {activeTab === "3" && (
+          <Standings tournId={id as string} season={season} />
+        )}
       </section>
     </main>
   );
