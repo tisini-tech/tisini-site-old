@@ -391,6 +391,7 @@ export type Match = {
 
 export type Highlights = {
   id: number;
+  subplayer_name: string;
   event_name: string;
   event_id: number;
   time: string;

@@ -78,27 +78,33 @@ const HighlightsCard = ({
       ? "🟥"
       : highlight.event_name === "Card"
         ? "🟨"
-        : highlight.event_name === "Goal" ||
-            highlight.event_name === "PM Penalties"
-          ? "⚽"
-          : highlight.event_name === "Score" &&
-              (highlight.subevent_name === "Try" ||
-                highlight.subevent_name === "Penalty Try")
-            ? "🏉"
+        : highlight.event_name === "Assists"
+          ? "🅰️"
+          : highlight.event_name === "Goal" ||
+              highlight.event_name === "PM Penalties"
+            ? "⚽"
             : highlight.event_name === "Score" &&
-                (highlight.subevent_name === "Successful Conversion" ||
-                  highlight.subevent_name === "Conversion" ||
-                  highlight.subevent_name === "Missed Conversion")
-              ? "↔️"
+                (highlight.subevent_name === "Try" ||
+                  highlight.subevent_name === "Penalty Try")
+              ? "🏉"
               : highlight.event_name === "Score" &&
-                  (highlight.subevent_name === "Successful Penalty" ||
-                    highlight.subevent_name === "Missed Penalty")
-                ? "⚡"
+                  (highlight.subevent_name === "Successful Conversion" ||
+                    highlight.subevent_name === "Conversion" ||
+                    highlight.subevent_name === "Missed Conversion")
+                ? "↔️"
                 : highlight.event_name === "Score" &&
-                    (highlight.subevent_name === "Successful Drop Goal" ||
-                      highlight.subevent_name === "Missed Drop Goal")
-                  ? "🎯"
-                  : "";
+                    (highlight.subevent_name === "Successful Penalty" ||
+                      highlight.subevent_name === "Missed Penalty")
+                  ? "⚡"
+                  : highlight.event_name === "Score" &&
+                      (highlight.subevent_name === "Successful Drop Goal" ||
+                        highlight.subevent_name === "Missed Drop Goal")
+                    ? "🎯"
+                    : "";
+
+  if (highlight.event_name === "Assists" && !highlight.pname?.trim()) {
+    return null;
+  }
 
   return (
     <div className="p-2 font-semibold">
@@ -111,9 +117,13 @@ const HighlightsCard = ({
                 {"⬇️"} {highlight.pname}
               </div>
               <div className="text-green-600 capitalize">
-                {"⬆️"} {highlight.pname}
+                {"⬆️"} {highlight.subplayer_name}
               </div>
             </div>
+          </div>
+        ) : highlight.event_name === "Assists" ? (
+          <div className="capitalize text-blue-700 flex items-center gap-1">
+            {highlight.game_minute}' {icon} Assist · {highlight.pname}
           </div>
         ) : highlight.event_name === "PM Penalties" ? (
           <div
@@ -154,10 +164,14 @@ const HighlightsCard = ({
               {highlight.pname} {"⬇️"}
             </div>
             <div className="text-green-600 text-end capitalize">
-              {highlight.pname} {"⬆️"}
+              {highlight.subplayer_name} {"⬆️"}
             </div>
           </div>
           {highlight.game_minute}'
+        </div>
+      ) : highlight.event_name === "Assists" ? (
+        <div className="flex justify-end capitalize text-blue-700 gap-1">
+          {highlight.pname} {icon} Assist · {highlight.game_minute}'
         </div>
       ) : highlight.event_name === "PM Penalties" ? (
         <div
